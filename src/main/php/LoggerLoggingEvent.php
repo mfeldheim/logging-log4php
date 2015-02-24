@@ -114,9 +114,9 @@ class LoggerLoggingEvent {
 	* @param LoggerLevel $level The level of this event.
 	* @param mixed $message The message of this event.
 	* @param integer $timeStamp the timestamp of this logging event.
-	* @param Exception $throwable The throwable associated with logging event
+	* @param array $context The throwable associated with logging event
 	*/
-	public function __construct($fqcn, $logger, LoggerLevel $level, $message, $timeStamp = null, $throwable = null) {
+	public function __construct($fqcn, $logger, LoggerLevel $level, $message, $timeStamp = null, array $context = array()) {
 		$this->fqcn = $fqcn;
 		if($logger instanceof Logger) {
 			$this->logger = $logger;
@@ -124,16 +124,26 @@ class LoggerLoggingEvent {
 		} else {
 			$this->categoryName = strval($logger);
 		}
-		$this->level = $level;
-		$this->message = $message;
+
+        /**
+         * message interpolation, partly taken from the PSR3 implementation example
+         * @see https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md#13-context
+         */
+        $replace = array();
+        foreach($context as $key=>$val) {
+            if ($key == 'exception' && $val instanceof Exception) {
+                $this->throwableInfo = new LoggerThrowableInformation($val);
+                $val = $val->getCode() . ': ' . $val->getMessage();
+            }
+            $replace['{'.$key.'}'] = $val;
+        }
+
+        $this->level = $level;
+		$this->message = strtr($message, $replace);
 		if($timeStamp !== null && is_numeric($timeStamp)) {
 			$this->timeStamp = $timeStamp;
 		} else {
 			$this->timeStamp = microtime(true);
-		}
-		
-		if ($throwable !== null && $throwable instanceof Exception) {
-			$this->throwableInfo = new LoggerThrowableInformation($throwable);
 		}
 	}
 
