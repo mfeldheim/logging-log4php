@@ -31,9 +31,12 @@ require dirname(__FILE__) . '/LoggerAutoloader.php';
  * 		<li>{@link trace()}</li>
  * 		<li>{@link debug()}</li>
  * 		<li>{@link info()}</li>
- * 		<li>{@link warn()}</li>
+ * 		<li>{@link notice()}</li>
+ * 		<li>{@link warning()}</li>
  * 		<li>{@link error()}</li>
- * 		<li>{@link fatal()}</li>
+ * 		<li>{@link critical()}</li>
+ * 		<li>{@link alert()}</li>
+ * 		<li>{@link emergency()}</li>
  * 	</ul>
  * 
  * @package    log4php
@@ -93,88 +96,32 @@ class Logger implements LoggerInterface {
 	
 	// ******************************************
 	// *** Logging methods                    ***
-	// ******************************************
+    // ******************************************
 
     /**
-     * Log a message object with the EMERGENCY level.
-     * System is unusable.
+     * Log a message object with the TRACE level.
      *
-     * @param string $message
-     * @param array $context
-     * @return null
+     * @param mixed $message message
+     * @param array $context context key will substitute message variables {key} <> [key=>val]
+     *        for throwable use key exception
+     * @return void
+     * @deprecated This method is not part of PSR-3 and may be removed in a future release
      */
-    public function emergency($message, array $context = array()) {
-        $this->log(LoggerLevel::getLevelEmergency(), $message, $context);
+    public function trace($message, array $context = array()) {
+        $this->log(LoggerLevel::getLevelTrace(), $message, $context);
     }
 
     /**
-     * Log a message object with the ALERT level.
-     * Action must be taken immediately.
+     * Log a message object with the DEBUG level.
+     * Detailed debug information.
      *
-     * Example: Entire website down, database unavailable, etc. This should
-     * trigger the SMS alerts and wake you up.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function alert($message, array $context = array()) {
-        $this->log(LoggerLevel::getLevelAlert(), $message, $context);
-    }
-
-    /**
-     * Log a message object with the CRITICAL level.
-     * Critical conditions.
-     *
-     * Example: Application component unavailable, unexpected exception.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function critical($message, array $context = array()) {
-        $this->log(LoggerLevel::getLevelCritical(), $message, $context);
-    }
-
-    /**
-     * Log a message object with the ERROR level.
-     * Runtime errors that do not require immediate action but should typically
-     * be logged and monitored.
-     *
-     * @param string $message message
+     * @param mixed $message message
      * @param array $context context key will substitute message variables {key} <> [key=>val]
      *        for throwable use key exception
      * @return void
      */
-    public function error($message, array $context = array()) {
-        $this->log(LoggerLevel::getLevelError(), $message, $context);
-    }
-
-    /**
-     * Log a message object with the WARNING level.
-     * Exceptional occurrences that are not errors.
-     *
-     * Example: Use of deprecated APIs, poor use of an API, undesirable things
-     * that are not necessarily wrong.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function warning($message, array $context = array()) {
-        $this->log(LoggerLevel::getLevelWarning(), $message, $context);
-    }
-
-    /**
-     * Log a message object with the NOTICE level.
-     * Normal but significant events.
-     *
-     * @param string $message
-     * @param array $context
-     * @return null
-     */
-    public function notice($message, array $context = array()) {
-        $this->log(LoggerLevel::getLevelNotice(), $message, $context);
+    public function debug($message, array $context = array()) {
+        $this->log(LoggerLevel::getLevelDebug(), $message, $context);
     }
 
     /**
@@ -193,30 +140,31 @@ class Logger implements LoggerInterface {
     }
 
     /**
-     * Log a message object with the DEBUG level.
-     * Detailed debug information.
+     * Log a message object with the NOTICE level.
+     * Normal but significant events.
      *
-     * @param mixed $message message
-     * @param array $context context key will substitute message variables {key} <> [key=>val]
-     *        for throwable use key exception
-     * @return void
+     * @param string $message
+     * @param array $context
+     * @return null
      */
-    public function debug($message, array $context = array()) {
-        $this->log(LoggerLevel::getLevelDebug(), $message, $context);
+    public function notice($message, array $context = array()) {
+        $this->log(LoggerLevel::getLevelNotice(), $message, $context);
     }
 
     /**
-	 * Log a message object with the TRACE level.
-	 *
-	 * @param mixed $message message
-     * @param array $context context key will substitute message variables {key} <> [key=>val]
-     *        for throwable use key exception
-     * @return void
-     * @deprecated This method is not part of PSR-3 and may be removed in a future release
-	 */
-	public function trace($message, array $context = array()) {
-		$this->log(LoggerLevel::getLevelTrace(), $message, $context);
-	} 		
+     * Log a message object with the WARNING level.
+     * Exceptional occurrences that are not errors.
+     *
+     * Example: Use of deprecated APIs, poor use of an API, undesirable things
+     * that are not necessarily wrong.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function warning($message, array $context = array()) {
+        $this->log(LoggerLevel::getLevelWarning(), $message, $context);
+    }
 
     /**
      * Log a message with the WARNING level.
@@ -232,21 +180,76 @@ class Logger implements LoggerInterface {
 		$this->warning($message, $context);
 	}
 
-	/**
-	 * Log a message object with the CRITICAL level.
+    /**
+     * Log a message object with the ERROR level.
+     * Runtime errors that do not require immediate action but should typically
+     * be logged and monitored.
+     *
+     * @param string $message message
+     * @param array $context context key will substitute message variables {key} <> [key=>val]
+     *        for throwable use key exception
+     * @return void
+     */
+    public function error($message, array $context = array()) {
+        $this->log(LoggerLevel::getLevelError(), $message, $context);
+    }
+
+    /**
+     * Log a message object with the CRITICAL level.
+     * Critical conditions.
+     *
+     * Example: Application component unavailable, unexpected exception.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function critical($message, array $context = array()) {
+        $this->log(LoggerLevel::getLevelCritical(), $message, $context);
+    }
+
+    /**
+     * Log a message object with the CRITICAL level.
      * critical equivalent, for downward compatibility
-	 *
-	 * @param mixed $message message
+     *
+     * @param mixed $message message
      * @param array $context context key will substitute message variables {key} <> [key=>val]
      *        for throwable use key exception
      * @return void
      * @deprecated This method is replaced by Logger::critical and may be removed in a future release
-	 */
-	public function fatal($message, array $context = array()) {
+     */
+    public function fatal($message, array $context = array()) {
         $this->critical($message);
-	}
+    }
 
-	/**
+    /**
+     * Log a message object with the ALERT level.
+     * Action must be taken immediately.
+     *
+     * Example: Entire website down, database unavailable, etc. This should
+     * trigger the SMS alerts and wake you up.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function alert($message, array $context = array()) {
+        $this->log(LoggerLevel::getLevelAlert(), $message, $context);
+    }
+
+    /**
+     * Log a message object with the EMERGENCY level.
+     * System is unusable.
+     *
+     * @param string $message
+     * @param array $context
+     * @return null
+     */
+    public function emergency($message, array $context = array()) {
+        $this->log(LoggerLevel::getLevelEmergency(), $message, $context);
+    }
+
+    /**
 	 * Log a message using the provided logging level.
      *
      * @param string $message message
@@ -259,10 +262,10 @@ class Logger implements LoggerInterface {
 			$event = new LoggerLoggingEvent($this->fqcn, $this, $level, $message, null, $context);
 			$this->callAppenders($event);
 		}
-		
+
 		// Forward the event upstream if additivity is turned on
 		if(isset($this->parent) && $this->getAdditivity()) {
-			
+
 			// Use the event if already created
 			if (isset($event)) {
 				$this->parent->logEvent($event);
@@ -271,8 +274,8 @@ class Logger implements LoggerInterface {
 			}
 		}
 	}
-	
-	/**
+
+    /**
 	 * Logs an already prepared logging event object. 
 	 * @param LoggerLoggingEvent $event
 	 */
