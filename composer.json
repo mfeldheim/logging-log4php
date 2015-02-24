@@ -10,9 +10,6 @@
         "source": "https://git-wip-us.apache.org/repos/asf/logging-log4php.git",
         "email": "log4php-user@logging.apache.org"
     },
-    "autoload": {
-        "classmap": ["src/main/php/"]
-    },
     "require": {
         "php": ">=5.2.7",
         "psr/log": "1.0.0"
