@@ -18,7 +18,8 @@
  * @package log4php
  */
 
-use Psr\Log\LoggerInterface;
+use /** @noinspection PhpUndefinedClassInspection */
+    Psr\Log\LoggerInterface;
 
 require dirname(__FILE__) . '/LoggerAutoloader.php';
 
@@ -43,6 +44,8 @@ require dirname(__FILE__) . '/LoggerAutoloader.php';
  * @license	   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @link	   http://logging.apache.org/log4php
  */
+
+/** @noinspection PhpUndefinedClassInspection */
 class Logger implements LoggerInterface {
 	
 	/**
@@ -64,7 +67,7 @@ class Logger implements LoggerInterface {
 	/** The name of this Logger instance. */
 	private $name;
 	
-	/** The parent logger. Set to null if this is the root logger. */
+	/** @var Logger The parent logger. Set to null if this is the root logger. */
 	private $parent;
 	
 	/** A collection of appenders linked to this logger. */
@@ -219,7 +222,7 @@ class Logger implements LoggerInterface {
      * @deprecated This method is replaced by Logger::critical and may be removed in a future release
      */
     public function fatal($message, array $context = array()) {
-        $this->critical($message);
+        $this->critical($message, $context);
     }
 
     /**
@@ -231,7 +234,7 @@ class Logger implements LoggerInterface {
      *
      * @param string $message
      * @param array $context
-     * @return null
+     * @return void
      */
     public function alert($message, array $context = array()) {
         $this->log(LoggerLevel::getLevelAlert(), $message, $context);
@@ -243,15 +246,16 @@ class Logger implements LoggerInterface {
      *
      * @param string $message
      * @param array $context
-     * @return null
+     * @return void
      */
     public function emergency($message, array $context = array()) {
         $this->log(LoggerLevel::getLevelEmergency(), $message, $context);
     }
 
     /**
-	 * Log a message using the provided logging level.
+     * Log a message using the provided logging level.
      *
+     * @param mixed $level
      * @param string $message message
      * @param array $context context key will substitute message variables {key} <> [key=>val]
      *        for throwable use key exception
@@ -312,13 +316,13 @@ class Logger implements LoggerInterface {
 	 * wrappers.
 	 *
 	 * @param string $fqcn Fully qualified class name of the Logger
-	 * @param Exception $throwable Optional throwable information to include 
-	 *   in the logging event.
-	 * @param LoggerLevel $level log level	   
+     * @param array $context context key will substitute message variables {key} <> [key=>val]
+     *        for throwable use key exception
+     * @param LoggerLevel $level log level
 	 * @param mixed $message message to log
 	 */
-	public function forcedLog($fqcn, $throwable, LoggerLevel $level, $message) {
-		$event = new LoggerLoggingEvent($fqcn, $this, $level, $message, null, $throwable);
+	public function forcedLog($fqcn, $context, LoggerLevel $level, $message) {
+		$event = new LoggerLoggingEvent($fqcn, $this, $level, $message, null, $context);
 		$this->callAppenders($event);
 		
 		// Forward the event upstream if additivity is turned on
@@ -332,7 +336,8 @@ class Logger implements LoggerInterface {
 	 * @param LoggerLoggingEvent $event
 	 */
 	public function callAppenders($event) {
-		foreach($this->appenders as $appender) {
+		/** @var LoggerAppender $appender */
+        foreach($this->appenders as $appender) {
 			$appender->doAppend($event);
 		}
 	}
@@ -344,7 +349,7 @@ class Logger implements LoggerInterface {
 	/**
 	 * Check whether this Logger is enabled for a given Level passed as parameter.
 	 *
-	 * @param LoggerLevel level
+	 * @param LoggerLevel $level
 	 * @return boolean
 	 */
 	public function isEnabledFor(LoggerLevel $level) {
@@ -354,6 +359,7 @@ class Logger implements LoggerInterface {
 	/**
 	 * Check whether this Logger is enabled for the TRACE Level.
 	 * @return boolean
+     * @deprecated method removed for PSR-3 compatibility
 	 */
 	public function isTraceEnabled() {
 		return $this->isEnabledFor(LoggerLevel::getLevelTrace());
@@ -374,13 +380,30 @@ class Logger implements LoggerInterface {
 	public function isInfoEnabled() {
 		return $this->isEnabledFor(LoggerLevel::getLevelInfo());
 	}
-	
-	/**
+
+    /**
+     * Check whether this Logger is enabled for the NOTICE Level.
+     * @return boolean
+     */
+    public function isNoticeEnabled() {
+        return $this->isEnabledFor(LoggerLevel::getLevelNotice());
+    }
+
+    /**
+     * Check whether this Logger is enabled for the WARN Level.
+     * @return boolean
+     */
+    public function isWarningEnabled() {
+        return $this->isEnabledFor(LoggerLevel::getLevelWarning());
+    }
+
+    /**
 	 * Check whether this Logger is enabled for the WARN Level.
 	 * @return boolean
+     * @deprecated replaced by isWarningEnabled()
 	 */
 	public function isWarnEnabled() {
-		return $this->isEnabledFor(LoggerLevel::getLevelWarn());
+		return $this->isWarningEnabled();
 	}
 	
 	/**
@@ -390,14 +413,39 @@ class Logger implements LoggerInterface {
 	public function isErrorEnabled() {
 		return $this->isEnabledFor(LoggerLevel::getLevelError());
 	}
+
+    /**
+     * Check whether this Logger is enabled for the CRITICAL Level.
+     * @return boolean
+     */
+    public function isCriticalEnabled() {
+        return $this->isEnabledFor(LoggerLevel::getLevelCritical());
+    }
 	
 	/**
-	 * Check whether this Logger is enabled for the FATAL Level.
+	 * Check whether this Logger is enabled for the CRITICAL Level.
 	 * @return boolean
+     * @deprecated replaced by isCriticalEnabled()
 	 */
 	public function isFatalEnabled() {
-		return $this->isEnabledFor(LoggerLevel::getLevelFatal());
+		return $this->isCriticalEnabled();
 	}
+
+    /**
+     * Check whether this Logger is enabled for the EMERGENCY Level.
+     * @return bool
+     */
+    public function isAlertEnabled() {
+        return $this->isEnabledFor(LoggerLevel::getLevelAlert());
+    }
+
+    /**
+     * Check whether this Logger is enabled for the EMERGENCY Level.
+     * @return bool
+     */
+    public function isEmergencyEnabled() {
+        return $this->isEnabledFor(LoggerLevel::getLevelEmergency());
+    }
 	
 	// ******************************************
 	// *** Configuration methods              ***
@@ -428,7 +476,7 @@ class Logger implements LoggerInterface {
 			$appender->close();
 			unset($this->appenders[$appender->getName()]);
 		} else if (is_string($appender) and isset($this->appenders[$appender])) {
-			$this->appenders[$appender]->close();
+            $this->appenders[$appender]->close();
 			unset($this->appenders[$appender]);
 		}
 	}
@@ -440,11 +488,12 @@ class Logger implements LoggerInterface {
 	public function getAllAppenders() {
 		return $this->appenders;
 	}
-	
-	/**
-	 * Returns a linked appender by name.
-	 * @return LoggerAppender
-	 */
+
+    /**
+     * Returns a linked appender by name.
+     * @param $name
+     * @return LoggerAppender
+     */
 	public function getAppender($name) {
 		return $this->appenders[$name];
 	}
@@ -468,7 +517,7 @@ class Logger implements LoggerInterface {
 	/**
 	 * Starting from this Logger, search the Logger hierarchy for a non-null level and return it.
 	 * @see LoggerLevel
-	 * @return LoggerLevel or null
+	 * @return LoggerLevel|null
 	 */
 	public function getEffectiveLevel() {
 		for($logger = $this; $logger !== null; $logger = $logger->getParent()) {
@@ -476,6 +525,7 @@ class Logger implements LoggerInterface {
 				return $logger->getLevel();
 			}
 		}
+        return null;
 	}
   
 	/**
@@ -570,7 +620,7 @@ class Logger implements LoggerInterface {
 	 * Clears all Logger definitions from the logger hierarchy.
 	 */
 	public static function clear() {
-		return self::getHierarchy()->clear();
+		self::getHierarchy()->clear();
 	}
 	
 	/**
@@ -588,7 +638,7 @@ class Logger implements LoggerInterface {
 	 * destructors.
 	 */
 	public static function shutdown() {
-		return self::getHierarchy()->shutdown();
+		self::getHierarchy()->shutdown();
 	}
 	
 	/**
@@ -631,15 +681,16 @@ class Logger implements LoggerInterface {
 		$configurator->configure(self::getHierarchy(), $configuration);
 		self::$initialized = true;
 	}
-	
-	/**
-	 * Creates a logger configurator instance based on the provided 
-	 * configurator class. If no class is given, returns an instance of
-	 * the default configurator.
-	 * 
-	 * @param string|LoggerConfigurator $configurator The configurator class 
-	 * or LoggerConfigurator instance.
-	 */
+
+    /**
+     * Creates a logger configurator instance based on the provided
+     * configurator class. If no class is given, returns an instance of
+     * the default configurator.
+     *
+     * @param string|LoggerConfigurator $configurator The configurator class
+     * or LoggerConfigurator instance.
+     * @return LoggerConfiguratorDefault
+     */
 	private static function getConfigurator($configurator = null) {
 		if ($configurator === null) {
 			return new LoggerConfiguratorDefault();
