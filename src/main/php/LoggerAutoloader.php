@@ -24,6 +24,12 @@ if (function_exists('__autoload')) {
 
 spl_autoload_register(array('LoggerAutoloader', 'autoload'));
 
+/** if installed via composer, use composer autoloader **/
+$composerAL=dirname(__FILE__).'/../../../vendor/autoload.php';
+if (file_exists($composerAL)) {
+    include $composerAL;
+}
+
 /**
  * Class autoloader.
  *
@@ -52,6 +58,7 @@ class LoggerAutoloader {
 		'LoggerReflectionUtils' => '/LoggerReflectionUtils.php',
 		'LoggerRoot' => '/LoggerRoot.php',
 		'LoggerThrowableInformation' => '/LoggerThrowableInformation.php',
+        'LoggerInterface' => '/LoggerInterface.php',
 
 		// Appenders
 		'LoggerAppenderAMQP' => '/appenders/LoggerAppenderAMQP.php',
@@ -138,7 +145,7 @@ class LoggerAutoloader {
 	 * @param string $className The name of the class to load.
 	 */
 	public static function autoload($className) {
-		if(isset(self::$classes[$className])) {
+		if(isset(self::$classes[$className]) && !class_exists($className)) {
 			include dirname(__FILE__) . self::$classes[$className];
 		}
 	}
