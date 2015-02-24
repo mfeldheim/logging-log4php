@@ -472,12 +472,13 @@ class Logger implements LoggerInterface {
 	 * @param mixed $appender an appender name or a {@link LoggerAppender} instance.
 	 */
 	public function removeAppender($appender) {
-		if($appender instanceof LoggerAppender) {
+		if(is_string($appender) and isset($this->appenders[$appender])) {
+            $appender = $this->appenders[$appender];
+        }
+
+        if($appender instanceof LoggerAppender) {
 			$appender->close();
-			unset($this->appenders[$appender->getName()]);
-		} else if (is_string($appender) and isset($this->appenders[$appender])) {
-            $this->appenders[$appender]->close();
-			unset($this->appenders[$appender]);
+            unset($this->appenders[$appender->getName()]);
 		}
 	}
 	
