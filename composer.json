@@ -14,6 +14,7 @@
         "classmap": ["src/main/php/"]
     },
     "require": {
-        "php": ">=5.2.7"
+        "php": ">=5.2.7",
+        "psr/log": "1.0.0"
     }
 }
