@@ -116,7 +116,7 @@ class LoggerLoggingEvent {
 	* @param integer $timeStamp the timestamp of this logging event.
 	* @param array $context The throwable associated with logging event
 	*/
-	public function __construct($fqcn, $logger, LoggerLevel $level, $message, $timeStamp = null, array $context = array()) {
+	public function __construct($fqcn, $logger, LoggerLevel $level, $message, $timeStamp = null, $context = array()) {
 		$this->fqcn = $fqcn;
 		if($logger instanceof Logger) {
 			$this->logger = $logger;
@@ -129,6 +129,9 @@ class LoggerLoggingEvent {
          * message interpolation, partly taken from the PSR3 implementation example
          * @see https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md#13-context
          */
+        if($context instanceof Exception) {
+            $context = array('exception' => $context);
+        }
         $replace = array();
         foreach($context as $key=>$val) {
             if ($key == 'exception' && $val instanceof Exception) {
