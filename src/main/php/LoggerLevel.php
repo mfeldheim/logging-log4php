@@ -33,8 +33,8 @@
 class LoggerLevel {
 	
 	const OFF = 2147483647;
-    const EMERGENCY = 50000;
-    const ALERT = 50000;
+    const EMERGENCY = 70000;
+    const ALERT = 60000;
     const CRITICAL = 50000;
     /** @deprecated will be replaced by CRITICAL to fit PSR-3 norms */
     const FATAL = self::CRITICAL;
@@ -122,7 +122,7 @@ class LoggerLevel {
         if(!isset(self::$levelMap[LoggerLevel::ALERT])) {
             self::$levelMap[LoggerLevel::ALERT] = new LoggerLevel(LoggerLevel::ALERT, 'ALERT', LOG_ALERT);
         }
-        return self::$levelMap[LoggerLevel::EMERGENCY];
+        return self::$levelMap[LoggerLevel::ALERT];
     }
 
     /**
