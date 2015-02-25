@@ -39,10 +39,10 @@ class LoggerLevelTest extends PHPUnit_Framework_TestCase {
 		$this->doTestLevel(LoggerLevel::toLevel('OFF'), LoggerLevel::OFF, 'OFF', LOG_ALERT);
     }
 
-	public function testLevelFatal() {
-		$this->doTestLevel(LoggerLevel::getLevelFatal(), LoggerLevel::FATAL, 'FATAL', LOG_ALERT);
-		$this->doTestLevel(LoggerLevel::toLevel(LoggerLevel::FATAL), LoggerLevel::FATAL, 'FATAL', LOG_ALERT);
-		$this->doTestLevel(LoggerLevel::toLevel('FATAL'), LoggerLevel::FATAL, 'FATAL', LOG_ALERT);
+	public function testLevelCritical() {
+		$this->doTestLevel(LoggerLevel::getLevelCritical(), LoggerLevel::CRITICAL, 'CRITICAL', LOG_CRIT);
+		$this->doTestLevel(LoggerLevel::toLevel(LoggerLevel::CRITICAL), LoggerLevel::CRITICAL, 'CRITICAL', LOG_CRIT);
+		$this->doTestLevel(LoggerLevel::toLevel('CRITICAL'), LoggerLevel::CRITICAL, 'CRITICAL', LOG_CRIT);
     }
 
 	public function testLevelError() {
@@ -51,10 +51,10 @@ class LoggerLevelTest extends PHPUnit_Framework_TestCase {
 		$this->doTestLevel(LoggerLevel::toLevel('ERROR'), LoggerLevel::ERROR, 'ERROR', LOG_ERR);
     }
 	
-	public function testLevelWarn() {
-		$this->doTestLevel(LoggerLevel::getLevelWarn(), LoggerLevel::WARN, 'WARN', LOG_WARNING);
-		$this->doTestLevel(LoggerLevel::toLevel(LoggerLevel::WARN), LoggerLevel::WARN, 'WARN', LOG_WARNING);
-		$this->doTestLevel(LoggerLevel::toLevel('WARN'), LoggerLevel::WARN, 'WARN', LOG_WARNING);
+	public function testLevelWarning() {
+		$this->doTestLevel(LoggerLevel::getLevelWarning(), LoggerLevel::WARNING, 'WARNING', LOG_WARNING);
+		$this->doTestLevel(LoggerLevel::toLevel(LoggerLevel::WARNING), LoggerLevel::WARNING, 'WARNING', LOG_WARNING);
+		$this->doTestLevel(LoggerLevel::toLevel('WARN'), LoggerLevel::WARNING, 'WARNING', LOG_WARNING);
     }
 
 	public function testLevelInfo() {
