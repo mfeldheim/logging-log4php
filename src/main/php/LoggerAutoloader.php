@@ -58,7 +58,7 @@ class LoggerAutoloader {
 		'LoggerReflectionUtils' => '/LoggerReflectionUtils.php',
 		'LoggerRoot' => '/LoggerRoot.php',
 		'LoggerThrowableInformation' => '/LoggerThrowableInformation.php',
-        'LoggerInterface' => '/LoggerInterface.php',
+        'Psr\\Log\\LoggerInterface' => '/LoggerInterface.php',
 
 		// Appenders
 		'LoggerAppenderAMQP' => '/appenders/LoggerAppenderAMQP.php',
@@ -145,6 +145,7 @@ class LoggerAutoloader {
 	 * @param string $className The name of the class to load.
 	 */
 	public static function autoload($className) {
+        echo $className . PHP_EOL;
 		if(isset(self::$classes[$className]) && !class_exists($className)) {
 			include dirname(__FILE__) . self::$classes[$className];
 		}
