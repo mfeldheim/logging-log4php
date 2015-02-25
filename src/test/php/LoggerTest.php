@@ -138,7 +138,7 @@ class LoggerTest extends PHPUnit_Framework_TestCase {
 		Logger::configure($this->testConfig1);
 		
 		$logger = Logger::getLogger('mylogger');
-		ob_start();
+        ob_start();
         $logger->info('this is an info');
         $logger->warning('this is a warning');
         $logger->warn('this is a warning');

@@ -168,7 +168,7 @@ class LoggerAppenderDailyFileTest extends PHPUnit_Framework_TestCase {
 		$appender->close();
 
 		$actual = file_get_contents(PHPUNIT_TEMP_DIR . '/TEST-daily.txt.' . date("Ymd"));		
-		$expected = "WARN - my message".PHP_EOL;
+		$expected = "WARNING - my message".PHP_EOL;
 		self::assertEquals($expected, $actual);
 	}
 	 
@@ -183,7 +183,7 @@ class LoggerAppenderDailyFileTest extends PHPUnit_Framework_TestCase {
 		$appender->close();
 
 		$actual = file_get_contents(PHPUNIT_TEMP_DIR . '/TEST-daily.txt.' . date("Y"));		
-		$expected = "WARN - my message".PHP_EOL;
+		$expected = "WARNING - my message".PHP_EOL;
 		self::assertEquals($expected, $actual);
 	} 
 }

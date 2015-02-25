@@ -98,14 +98,18 @@ class LoggerAppenderMailTest extends PHPUnit_Framework_TestCase {
 		$appender->setMailer($mockMailer);
 		$appender->activateOptions();
 
-		$appender->append(LoggerTestHelper::getTraceEvent('tracing'));
-		$appender->append(LoggerTestHelper::getDebugEvent('debugging'));
-		$appender->append(LoggerTestHelper::getInfoEvent('informing'));
-		$appender->append(LoggerTestHelper::getWarnEvent('warning'));
-		$appender->append(LoggerTestHelper::getErrorEvent('erring'));
-		$appender->append(LoggerTestHelper::getFatalEvent('fatality!'));
+        $appender->append(LoggerTestHelper::getTraceEvent('tracing'));
+        $appender->append(LoggerTestHelper::getDebugEvent('debugging'));
+        $appender->append(LoggerTestHelper::getInfoEvent('informing'));
+        $appender->append(LoggerTestHelper::getWarnEvent('warning'));
+        $appender->append(LoggerTestHelper::getWarningEvent('warning'));
+        $appender->append(LoggerTestHelper::getErrorEvent('erring'));
+        $appender->append(LoggerTestHelper::getFatalEvent('fatality!'));
+        $appender->append(LoggerTestHelper::getCriticalEvent('critical!'));
+        $appender->append(LoggerTestHelper::getAlertEvent('alert!'));
+        $appender->append(LoggerTestHelper::getEmergencyEvent('emergency!'));
 
-		$this->assertSame(0, $mockMailer->count);
+        $this->assertSame(0, $mockMailer->count);
 		$appender->close();
 		$this->assertSame(1, $mockMailer->count);
 	}
@@ -161,8 +165,12 @@ class LoggerAppenderMailTest extends PHPUnit_Framework_TestCase {
 		$appender->append(LoggerTestHelper::getDebugEvent('debugging'));
 		$appender->append(LoggerTestHelper::getInfoEvent('informing'));
 		$appender->append(LoggerTestHelper::getWarnEvent('warning'));
+		$appender->append(LoggerTestHelper::getWarningEvent('warning'));
 		$appender->append(LoggerTestHelper::getErrorEvent('erring'));
 		$appender->append(LoggerTestHelper::getFatalEvent('fatality!'));
+		$appender->append(LoggerTestHelper::getCriticalEvent('critical!'));
+		$appender->append(LoggerTestHelper::getAlertEvent('alert!'));
+		$appender->append(LoggerTestHelper::getEmergencyEvent('emergency!'));
 		$appender->close();
 	}
 

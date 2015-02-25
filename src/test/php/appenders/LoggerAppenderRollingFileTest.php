@@ -103,7 +103,7 @@ class LoggerAppenderRollingFileTest extends PHPUnit_Framework_TestCase {
 		$file = PHPUNIT_TEMP_DIR . '/TEST-rolling.txt';
 		$data = file($file);
 		$line = $data[count($data)-1];
-		$e = "WARN - my messageXYZ".PHP_EOL;
+		$e = "WARNING - my messageXYZ".PHP_EOL;
 		self::assertEquals($e, $line);
 
 		$file = PHPUNIT_TEMP_DIR . '/TEST-rolling.txt.1';
@@ -189,7 +189,7 @@ class LoggerAppenderRollingFileTest extends PHPUnit_Framework_TestCase {
 
 	private function checkText($text) {
 		$line = $text[count($text)-1];
-		$e = "WARN - my message123".PHP_EOL;
+		$e = "WARNING - my message123".PHP_EOL;
 		foreach($text as $r) {
 			self::assertEquals($e, $r);
 		}

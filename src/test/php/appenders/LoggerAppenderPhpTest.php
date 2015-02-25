@@ -66,7 +66,7 @@ class LoggerAppenderPhpTest extends PHPUnit_Framework_TestCase {
 		
 		 
 		self::$expectedError = E_USER_ERROR;
-		self::$expectedMessage = "FATAL - This is a test" . PHP_EOL;
+		self::$expectedMessage = "CRITICAL - This is a test" . PHP_EOL;
 		$logger->fatal("This is a test");
 		
 		self::$expectedError = E_USER_ERROR;

@@ -57,8 +57,16 @@ class LoggerTestHelper {
 	public static function getWarnEvent($message = 'test', $logger = "test") {
 		return new LoggerLoggingEvent(__CLASS__, new Logger($logger), LoggerLevel::getLevelWarn(), $message);
 	}
-	
-	/** 
+
+    /**
+     * Returns a test logging event with level set to WARNING
+     * @return LoggerLoggingEvent
+     */
+    public static function getWarningEvent($message = 'test', $logger = "test") {
+        return new LoggerLoggingEvent(__CLASS__, new Logger($logger), LoggerLevel::getLevelWarning(), $message);
+    }
+
+    /**
 	 * Returns a test logging event with level set to ERROR. 
 	 * @return LoggerLoggingEvent
 	 */
@@ -73,8 +81,32 @@ class LoggerTestHelper {
 	public static function getFatalEvent($message = 'test', $logger = "test") {
 		return new LoggerLoggingEvent(__CLASS__, new Logger($logger), LoggerLevel::getLevelFatal(), $message);
 	}
-	
-	/** 
+
+    /**
+     * Returns a test logging event with level set to CRITICAL.
+     * @return LoggerLoggingEvent
+     */
+    public static function getCriticalEvent($message = 'test', $logger = "test") {
+        return new LoggerLoggingEvent(__CLASS__, new Logger($logger), LoggerLevel::getLevelCritical(), $message);
+    }
+
+    /**
+     * Returns a test logging event with level set to ALERT.
+     * @return LoggerLoggingEvent
+     */
+    public static function getAlertEvent($message = 'test', $logger = "test") {
+        return new LoggerLoggingEvent(__CLASS__, new Logger($logger), LoggerLevel::getLevelAlert(), $message);
+    }
+
+    /**
+     * Returns a test logging event with level set to EMERGENCY.
+     * @return LoggerLoggingEvent
+     */
+    public static function getEmergencyEvent($message = 'test', $logger = "test") {
+        return new LoggerLoggingEvent(__CLASS__, new Logger($logger), LoggerLevel::getLevelEmergency(), $message);
+    }
+
+    /**
 	 * Returns an array of logging events, one for each level, sorted ascending
 	 * by severitiy. 
 	 */
@@ -84,8 +116,12 @@ class LoggerTestHelper {
 			self::getDebugEvent($message),
 			self::getInfoEvent($message),
 			self::getWarnEvent($message),
+			self::getWarningEvent($message),
 			self::getErrorEvent($message),
 			self::getFatalEvent($message),
+			self::getCriticalEvent($message),
+			self::getAlertEvent($message),
+			self::getEmergencyEvent($message)
 		);
 	}
 	
@@ -96,8 +132,12 @@ class LoggerTestHelper {
 			LoggerLevel::getLevelDebug(),
 			LoggerLevel::getLevelInfo(),
 			LoggerLevel::getLevelWarn(),
+			LoggerLevel::getLevelWarning(),
 			LoggerLevel::getLevelError(),
 			LoggerLevel::getLevelFatal(),
+			LoggerLevel::getLevelCritical(),
+			LoggerLevel::getLevelAlert(),
+			LoggerLevel::getLevelEmergency(),
 		);
 	}
 	
