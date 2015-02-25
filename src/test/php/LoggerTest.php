@@ -139,20 +139,28 @@ class LoggerTest extends PHPUnit_Framework_TestCase {
 		
 		$logger = Logger::getLogger('mylogger');
 		ob_start();
-		$logger->info('this is an info');
-		$logger->warn('this is a warning');
-		$logger->error('this is an error');
-		$logger->debug('this is a debug message');
-		$logger->fatal('this is a fatal message');
-		$v = ob_get_contents();
+        $logger->info('this is an info');
+        $logger->warning('this is a warning');
+        $logger->warn('this is a warning');
+        $logger->error('this is an error message');
+        $logger->debug('this is a debug message');
+        $logger->fatal('this is a critical message');
+        $logger->critical('this is a critical message');
+        $logger->emergency('this is an emergency message');
+        $logger->alert('this is an alert');
+        $v = ob_get_contents();
 		ob_end_clean();
 		
 		$e = 'INFO - this is an info'.PHP_EOL;
-		$e .= 'WARN - this is a warning'.PHP_EOL;
+		$e .= 'WARNING - this is a warning'.PHP_EOL;
+		$e .= 'WARNING - this is a warning'.PHP_EOL;
 		$e .= 'ERROR - this is an error'.PHP_EOL;
 		$e .= 'DEBUG - this is a debug message'.PHP_EOL;
-		$e .= 'FATAL - this is a fatal message'.PHP_EOL;
-		
+		$e .= 'CRITICAL - this is a critical message'.PHP_EOL;
+		$e .= 'CRITICAL - this is a critical message'.PHP_EOL;
+		$e .= 'EMERGENCY - this is an emergency message'.PHP_EOL;
+		$e .= 'ALERT - this is a an alert'.PHP_EOL;
+
 		self::assertEquals($v, $e);
 	}
 	

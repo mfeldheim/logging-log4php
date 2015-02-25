@@ -121,7 +121,7 @@ class LoggerLoggingEventTest extends PHPUnit_Framework_TestCase {
 				
 		$ex		= new Exception('Message1');
 		$logger = $hierarchy->getLogger('test');
-		$logger->debug('test', $ex);
+		$logger->debug('test', array('exception' => $ex));
 		$hierarchy->shutdown();
 
 		$ti = self::$throwableInfo;
