@@ -142,7 +142,7 @@ class LoggerTest extends PHPUnit_Framework_TestCase {
         $logger->info('this is an info');
         $logger->warning('this is a warning');
         $logger->warn('this is a warning');
-        $logger->error('this is an error message');
+        $logger->error('this is an error');
         $logger->debug('this is a debug message');
         $logger->fatal('this is a critical message');
         $logger->critical('this is a critical message');
