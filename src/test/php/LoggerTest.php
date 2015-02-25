@@ -159,7 +159,7 @@ class LoggerTest extends PHPUnit_Framework_TestCase {
 		$e .= 'CRITICAL - this is a critical message'.PHP_EOL;
 		$e .= 'CRITICAL - this is a critical message'.PHP_EOL;
 		$e .= 'EMERGENCY - this is an emergency message'.PHP_EOL;
-		$e .= 'ALERT - this is a an alert'.PHP_EOL;
+		$e .= 'ALERT - this is an alert'.PHP_EOL;
 
 		self::assertEquals($v, $e);
 	}
