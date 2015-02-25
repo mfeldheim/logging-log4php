@@ -142,7 +142,7 @@ class LoggerLevel {
      * @deprecated replaced by LoggerLevel::getCriticalLevel to meet PSR-3 compatibility
      */
     public static function getLevelFatal() {
-        self::getLevelCritical();
+        return self::getLevelCritical();
     }
 
     /**
