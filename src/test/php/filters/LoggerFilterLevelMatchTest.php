@@ -162,19 +162,27 @@ class LoggerFilterLevelMatchTest extends PHPUnit_Framework_TestCase {
 		$logger->debug('Test');
 		$logger->info('Test');
 		$logger->warn('Test');
+		$logger->warning('Test');
 		$logger->error('Test');
 		$logger->fatal('Test');
-	
+		$logger->critical('Test');
+		$logger->alert('Test');
+		$logger->emergency('Test');
+
 		$actual = ob_get_clean();
 		
 		// Should log all except info
 		$expected = 
 			"TRACE - Test" . PHP_EOL . 
 			"DEBUG - Test" . PHP_EOL . 
-			"WARN - Test"  . PHP_EOL . 
-			"ERROR - Test" . PHP_EOL . 
-			"FATAL - Test" . PHP_EOL;	
-	
+			"WARNING - Test"  . PHP_EOL .
+			"WARNING - Test"  . PHP_EOL .
+			"ERROR - Test" . PHP_EOL .
+			"CRITICAL - Test" . PHP_EOL .
+			"CRITICAL - Test" . PHP_EOL .
+			"ALERT - Test" . PHP_EOL .
+			"EMERGENCY - Test" . PHP_EOL;
+
 		$this->assertSame($expected, $actual);
 	}
 }
