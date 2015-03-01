@@ -107,7 +107,7 @@ class LoggerTest extends PHPUnit_Framework_TestCase {
 			),
 		),
 	);
-	
+
 	protected function setUp() {
 		Logger::clear();
 		Logger::resetConfiguration();
@@ -227,4 +227,73 @@ class LoggerTest extends PHPUnit_Framework_TestCase {
 		$expected = str_repeat('INFO - test' . PHP_EOL, 3);
 		self::assertSame($expected, $actual);
 	}
+
+    public function testMessageInterpolation() {
+        Logger::configure($this->testConfig1);
+        $logger = Logger::getLogger('mylogger');
+        ob_start();
+        $message = 'this is an interpolated {level} message sent around {timestamp}';
+        $time = time();
+        $logger->trace($message, array('level' => LoggerLevel::getLevelTrace(), 'timestamp' => $time));
+        $logger->debug($message, array('level' => LoggerLevel::getLevelDebug(), 'timestamp' => $time));
+        $logger->info($message, array('level' => LoggerLevel::getLevelInfo(), 'timestamp' => $time));
+        $logger->warn($message, array('level' => LoggerLevel::getLevelWarn(), 'timestamp' => $time));
+        $logger->warning($message, array('level' => LoggerLevel::getLevelWarning(), 'timestamp' => $time));
+        $logger->error($message, array('level' => LoggerLevel::getLevelError(), 'timestamp' => $time));
+        $logger->fatal($message, array('level' => LoggerLevel::getLevelFatal(), 'timestamp' => $time));
+        $logger->critical($message, array('level' => LoggerLevel::getLevelCritical(), 'timestamp' => $time));
+        $logger->alert($message, array('level' => LoggerLevel::getLevelAlert(), 'timestamp' => $time));
+        $logger->emergency($message, array('level' => LoggerLevel::getLevelEmergency(), 'timestamp' => $time));
+        $message = ob_get_contents();
+        ob_end_clean();
+
+        $expected =
+            '' .
+            'DEBUG - this is an interpolated DEBUG message sent around ' . $time . PHP_EOL .
+            'INFO - this is an interpolated INFO message sent around ' . $time . PHP_EOL .
+            'WARNING - this is an interpolated WARNING message sent around ' . $time . PHP_EOL .
+            'WARNING - this is an interpolated WARNING message sent around ' . $time . PHP_EOL .
+            'ERROR - this is an interpolated ERROR message sent around ' . $time . PHP_EOL .
+            'CRITICAL - this is an interpolated CRITICAL message sent around ' . $time . PHP_EOL .
+            'CRITICAL - this is an interpolated CRITICAL message sent around ' . $time . PHP_EOL .
+            'ALERT - this is an interpolated ALERT message sent around ' . $time . PHP_EOL .
+            'EMERGENCY - this is an interpolated EMERGENCY message sent around ' . $time . PHP_EOL;
+
+        self::assertEquals($expected, $message);
+    }
+
+    public function testMessageExceptionInterpolation() {
+        Logger::configure($this->testConfig1);
+        $logger = Logger::getLogger('mylogger');
+        ob_start();
+        $message = 'this is an interpolated {level} exception {exception}';
+        $exception = new Exception("no mercy", 999);
+
+        $logger->trace($message, array('level' => LoggerLevel::getLevelTrace(), 'exception' => $exception));
+        $logger->debug($message, array('level' => LoggerLevel::getLevelDebug(), 'exception' => $exception));
+        $logger->info($message, array('level' => LoggerLevel::getLevelInfo(), 'exception' => $exception));
+        $logger->warn($message, array('level' => LoggerLevel::getLevelWarn(), 'exception' => $exception));
+        $logger->warning($message, array('level' => LoggerLevel::getLevelWarning(), 'exception' => $exception));
+        $logger->error($message, array('level' => LoggerLevel::getLevelError(), 'exception' => $exception));
+        $logger->fatal($message, array('level' => LoggerLevel::getLevelFatal(), 'exception' => $exception));
+        $logger->critical($message, array('level' => LoggerLevel::getLevelCritical(), 'exception' => $exception));
+        $logger->alert($message, array('level' => LoggerLevel::getLevelAlert(), 'exception' => $exception));
+        $logger->emergency($message, array('level' => LoggerLevel::getLevelEmergency(), 'exception' => $exception));
+        $message = ob_get_contents();
+        ob_end_clean();
+
+        $expected =
+            '' .
+            'DEBUG - this is an interpolated DEBUG exception ' . $exception->getCode() . ': ' . $exception->getMessage() . PHP_EOL .
+            'INFO - this is an interpolated INFO exception ' . $exception->getCode() . ': ' . $exception->getMessage() . PHP_EOL .
+            'WARNING - this is an interpolated WARNING exception ' . $exception->getCode() . ': ' . $exception->getMessage() . PHP_EOL .
+            'WARNING - this is an interpolated WARNING exception ' . $exception->getCode() . ': ' . $exception->getMessage() . PHP_EOL .
+            'ERROR - this is an interpolated ERROR exception ' . $exception->getCode() . ': ' . $exception->getMessage() . PHP_EOL .
+            'CRITICAL - this is an interpolated CRITICAL exception ' . $exception->getCode() . ': ' . $exception->getMessage() . PHP_EOL .
+            'CRITICAL - this is an interpolated CRITICAL exception ' . $exception->getCode() . ': ' . $exception->getMessage() . PHP_EOL .
+            'ALERT - this is an interpolated ALERT exception ' . $exception->getCode() . ': ' . $exception->getMessage() . PHP_EOL .
+            'EMERGENCY - this is an interpolated EMERGENCY exception ' . $exception->getCode() . ': ' . $exception->getMessage() . PHP_EOL;
+
+        self::assertEquals($expected, $message);
+    }
 }
