@@ -56,7 +56,7 @@ class LoggerLayoutTTCCTest extends PHPUnit_Framework_TestCase {
 		$layout = @new LoggerLayoutTTCC();
 		$v = $layout->format($event);
 
-		$pos = strpos($v, "[".$event->getThreadName()."] WARN TEST - testmessage");
+		$pos = strpos($v, "[".$event->getThreadName()."] WARNING TEST - testmessage");
 
 		if ($pos === false) {
 		    self::assertTrue(false);
