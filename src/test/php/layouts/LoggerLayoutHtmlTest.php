@@ -45,7 +45,7 @@ class LoggerLayoutHtmlTest extends PHPUnit_Framework_TestCase {
     }
     
     public function testWarnLayout() {
-		$event = new LoggerLoggingEvent("LoggerLayoutHtmlTest", new Logger("TEST"), LoggerLevel::getLevelWarn(), "testmessage");
+		$event = new LoggerLoggingEvent("LoggerLayoutHtmlTest", new Logger("TEST"), LoggerLevel::getLevelWarning(), "testmessage");
 
 		$layout = new LoggerLayoutHtml();
 		$v = $layout->format($event);
@@ -53,14 +53,48 @@ class LoggerLayoutHtmlTest extends PHPUnit_Framework_TestCase {
 		$e = PHP_EOL."<tr>".PHP_EOL.
 			"<td>".round(1000*$event->getRelativeTime())."</td>".PHP_EOL.
 			"<td title=\"".$event->getThreadName()." thread\">".$event->getThreadName()."</td>".PHP_EOL.
-			"<td title=\"Level\"><font color=\"#993300\"><strong>WARN</strong></font></td>".PHP_EOL.
+			"<td title=\"Level\"><font color=\"#993300\"><strong>WARNING</strong></font></td>".PHP_EOL.
 			"<td title=\"TEST category\">TEST</td>".PHP_EOL.
 			"<td title=\"Message\">testmessage</td>".PHP_EOL.
 			"</tr>".PHP_EOL;
 		
 		self::assertEquals($v, $e);
     }
-    
+
+    public function testAlertLayout() {
+        $event = new LoggerLoggingEvent("LoggerLayoutHtmlTest", new Logger("TEST"), LoggerLevel::getLevelAlert(), "testmessage");
+
+        $layout = new LoggerLayoutHtml();
+        $v = $layout->format($event);
+
+        $e = PHP_EOL."<tr>".PHP_EOL.
+            "<td>".round(1000*$event->getRelativeTime())."</td>".PHP_EOL.
+            "<td title=\"".$event->getThreadName()." thread\">".$event->getThreadName()."</td>".PHP_EOL.
+            "<td title=\"Level\">ALERT</td>".PHP_EOL.
+            "<td title=\"TEST category\">TEST</td>".PHP_EOL.
+            "<td title=\"Message\">testmessage</td>".PHP_EOL.
+            "</tr>".PHP_EOL;
+
+        self::assertEquals($v, $e);
+    }
+
+    public function testEmergencyLayout() {
+        $event = new LoggerLoggingEvent("LoggerLayoutHtmlTest", new Logger("TEST"), LoggerLevel::getLevelEmergency(), "testmessage");
+
+        $layout = new LoggerLayoutHtml();
+        $v = $layout->format($event);
+
+        $e = PHP_EOL."<tr>".PHP_EOL.
+            "<td>".round(1000*$event->getRelativeTime())."</td>".PHP_EOL.
+            "<td title=\"".$event->getThreadName()." thread\">".$event->getThreadName()."</td>".PHP_EOL.
+            "<td title=\"Level\">EMERGENCY</td>".PHP_EOL.
+            "<td title=\"TEST category\">TEST</td>".PHP_EOL.
+            "<td title=\"Message\">testmessage</td>".PHP_EOL.
+            "</tr>".PHP_EOL;
+
+        self::assertEquals($v, $e);
+    }
+
     public function testContentType() {
         $layout = new LoggerLayoutHtml();
         $v = $layout->getContentType();
