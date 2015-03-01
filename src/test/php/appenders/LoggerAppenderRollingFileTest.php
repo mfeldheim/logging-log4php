@@ -27,7 +27,7 @@
  */
 class LoggerAppenderRollingFileTest extends PHPUnit_Framework_TestCase {
 
-	const WARNING_MASSAGE = 'WARN - my messageXYZ';
+	const WARNING_MASSAGE = 'WARNING - my messageXYZ';
 	
 	protected function setUp() {
 		@unlink(PHPUNIT_TEMP_DIR . '/TEST-rolling.txt');
@@ -134,7 +134,7 @@ class LoggerAppenderRollingFileTest extends PHPUnit_Framework_TestCase {
 		$data = file($file);
 		
 		$line = $data[count($data)-1];
-		$e = "WARN - my messageXYZ".PHP_EOL;
+		$e = "WARNING - my messageXYZ".PHP_EOL;
 		self::assertEquals($e, $line);
 
 		$file = PHPUNIT_TEMP_DIR.'/TEST-rolling.txt.1';
