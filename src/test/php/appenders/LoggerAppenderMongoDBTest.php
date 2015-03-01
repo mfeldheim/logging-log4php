@@ -32,7 +32,9 @@
  */
 class LoggerAppenderMongoDBTest extends PHPUnit_Framework_TestCase {
 
-	protected $appender;
+	/** @var LoggerAppenderMongoDB */
+    protected $appender;
+    /** @var LoggerLoggingEvent */
 	protected $event;
 
 	protected function setUp() {
