@@ -75,18 +75,26 @@ class LoggerAppenderSocketTest extends PHPUnit_Framework_TestCase {
 		$logger->trace("This message is a test");
 		$logger->debug("This message is a test");
 		$logger->info("This message is a test");
+		$logger->warning("This message is a test");
 		$logger->warn("This message is a test");
 		$logger->error("This message is a test");
 		$logger->fatal("This message is a test");
-		
+		$logger->critical("This message is a test");
+		$logger->alert("This message is a test");
+		$logger->emergency("This message is a test");
+
 		$actual = $this->getPlayback();
 		$this->stopServer();
 		
 		$expected = "DEBUG - This message is a test" . 
 		            "INFO - This message is a test" . 
-		            "WARN - This message is a test" . 
-		            "ERROR - This message is a test" . 
-		            "FATAL - This message is a test";
+		            "WARNING - This message is a test" .
+		            "WARNING - This message is a test" .
+		            "ERROR - This message is a test" .
+		            "CRITICAL - This message is a test" .
+		            "CRITICAL - This message is a test" .
+		            "ALERT - This message is a test" .
+		            "EMERGENCY - This message is a test";
 
 		$this->assertEquals($expected, $actual);
 	}
