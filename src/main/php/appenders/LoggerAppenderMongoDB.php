@@ -280,8 +280,20 @@ class LoggerAppenderMongoDB extends LoggerAppender {
 				}
 			}
 			if ($this->capped === true) {
-				$this->collection = $db->createCollection($this->collectionName, $this->capped, $this->cappedSize,
-														  $this->cappedMax);
+                /** @TODO either define a client version or accept both interfaces */
+                /** MongoDB::createCollection(): >= 1.4.0: This method now accepts arguments as an options array instead of the three optional arguments for capped, size and max element */
+                if (preg_replace('/[^\d]+/', '', MongoClient::VERSION) >= 140) {
+                    /** @noinspection PhpParamsInspection */
+                    $this->collection = $db->createCollection($this->collectionName, array(
+                        'capped' => $this->capped,
+                        'size' => $this->cappedSize,
+                        'max' => $this->cappedMax
+                    ));
+                } else {
+                    /** @noinspection PhpParamsInspection */
+                    $this->collection = $db->createCollection($this->collectionName, $this->capped, $this->cappedSize,
+                        $this->cappedMax);
+                }
 			} else {
 				$this->collection = $db->selectCollection($this->collectionName);
 			}
@@ -293,7 +305,7 @@ class LoggerAppenderMongoDB extends LoggerAppender {
 			$this->warn(sprintf('Error while selecting mongo database: %s', $ex->getMessage()));
 		} catch (Exception $ex) {
 			$this->closed = true;
-			$this->warn('Invalid credentials for mongo database authentication');
+			$this->warn(sprintf('Error occured: %s', $ex->getMessage()));
 		}
 	}
 
